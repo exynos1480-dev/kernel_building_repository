@@ -38,6 +38,8 @@ jobs:
         cd s5e8845-kernel
         repo init -u https://github.com/kastentop2005/kernel_manifest.git -b ${{ github.event.inputs.branch }}
         repo sync
+        cd common
+        git submodule update --init --recursive
       shell: bash
 
     - name: Build kernel
