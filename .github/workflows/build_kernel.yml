@@ -14,8 +14,16 @@ jobs:
 
     steps:
     - name: Checkout this repo (for workflow files)
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
+    - name: Cleanup
+      uses: rokibhasansagar/slimhub_actions@main
+      
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 12
+      
     - name: Install packages
       run: |
         sudo apt update
@@ -48,4 +56,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: kernel-image
-        path: s5e8845-kernel/out/s5e8845_user/obj/KERNEL_OBJ/arch/arm64/boot/Image
+        path: s5e8845-kernel/out/s5e8845_user/dist/Image
