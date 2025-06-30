@@ -64,7 +64,7 @@ jobs:
     - name: Copy Kernel Files to AnyKernel3
       run: |
         cd AnyKernel3
-        cp ./s5e8845-kernel/out/s5e8845_user/dist/Image Image
+        cp ../s5e8845-kernel/out/s5e8845_user/dist/Image Image
       shell: bash
 
     - name: Package Kernel with AnyKernel3
