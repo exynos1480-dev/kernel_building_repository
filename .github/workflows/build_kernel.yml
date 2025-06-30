@@ -1,10 +1,10 @@
-name: Build Kernel
+name: Build GlowingKernel
 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to build'
+        description: 'Branch to build, check branches in kernel_manifest for list'
         required: true
         default: 'main'
 
