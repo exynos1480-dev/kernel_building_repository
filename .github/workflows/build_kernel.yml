@@ -90,3 +90,29 @@ jobs:
       with:
         name: Kernel-Image-ZIP
         path: s5e8845-kernel/out/s5e8845_user/dist/Image
+
+    - name: Determine Branch Type
+      id: branch_type
+      run: |
+        if [[ "${{ github.event.inputs.branch }}" == *"permissive"* ]]; then
+          echo "BRANCH_TYPE=permissive" >> $GITHUB_ENV
+        else
+          echo "BRANCH_TYPE=enforcing" >> $GITHUB_ENV
+        fi
+      shell: bash
+
+    - name: Send Telegram Message with Artifact
+      uses: appleboy/telegram-action@master
+      with:
+        telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
+        chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+        message: |
+          *Build Information*:
+          - Branch: ${{ github.event.inputs.branch }}
+          - Clang Version: ${{ steps.clang.outputs.version }}
+          - Latest Commit: ${{ github.sha }}
+          - Branch Type: ${{ env.BRANCH_TYPE }}
+          - Device: Galaxy A55 5G
+          - SoC: s5e8845 (Exynos 1480)
+          - Artifact: GlowingKernel-V3-Artifact.zip
+        document: AnyKernel3/GlowingKernel-V3-Artifact.zip
