@@ -109,8 +109,7 @@ jobs:
         message: |
           *Build Information*:
           - Branch: ${{ github.event.inputs.branch }}
-          - Clang Version: ${{ steps.clang.outputs.version }}
-          - Latest Commit: ${{ github.sha }}
+          - Clang Version: 17
           - Branch Type: ${{ env.BRANCH_TYPE }}
           - Device: Galaxy A55 5G
           - SoC: s5e8845 (Exynos 1480)
