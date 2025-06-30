@@ -97,9 +97,9 @@ jobs:
       id: branch_type
       run: |
         if [[ "${{ github.event.inputs.branch }}" == *"permissive"* ]]; then
-          echo "BRANCH_TYPE=permissive" >> $GITHUB_ENV
+          echo "BRANCH_TYPE=Permissive" >> $GITHUB_ENV
         else
-          echo "BRANCH_TYPE=enforcing" >> $GITHUB_ENV
+          echo "BRANCH_TYPE=Enforcing" >> $GITHUB_ENV
         fi
       shell: bash
 
@@ -109,11 +109,12 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
         message: |
-          *Build Information*:
-          - Branch: ${{ github.event.inputs.branch }}
-          - Clang Version: 17
-          - Branch Type: ${{ env.BRANCH_TYPE }}
-          - Device: Galaxy A55 5G
-          - SoC: s5e8845 (Exynos 1480)
-          - Artifact: GlowingKernel-V3-Artifact.zip
+          **Build Information**:
+          **Branch**: ${{ github.event.inputs.branch }}
+          **Clang Version**: 17.0.1 (r487747c)
+          **Kernel**: 6.1.141
+          **Type**: ${{ env.BRANCH_TYPE }}
+          **Device**: Galaxy A55 5G
+          **SoC**: s5e8845 (Exynos 1480)
+          **NOTE: Don't use Enforcing builds on UI 8**
         document: AnyKernel3/GlowingKernel-V3-Artifact.zip
