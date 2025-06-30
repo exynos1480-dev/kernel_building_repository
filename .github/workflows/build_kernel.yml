@@ -42,10 +42,11 @@ jobs:
         git submodule update --init --recursive
       shell: bash
 
-    - name: Remove -maybe-dirty from stamp.bzl
+    - name: Modify build files before building
       run: |
         cd s5e8845-kernel
         sed -i "s/-maybe-dirty//g" "build/kernel/kleaf/impl/stamp.bzl"
+        sed -i 's/--config=stamp//g' "build.sh"
       shell: bash
 
     - name: Build kernel
