@@ -18,12 +18,12 @@ jobs:
 
     - name: Cleanup
       uses: rokibhasansagar/slimhub_actions@main
-      
+
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
       with:
         swap-size-gb: 12
-      
+
     - name: Install packages
       run: |
         sudo apt update
@@ -42,20 +42,50 @@ jobs:
         git submodule update --init --recursive
       shell: bash
 
+    - name: Remove -maybe-dirty from stamp.bzl
+      run: |
+        cd s5e8845-kernel
+        sed -i "s/-maybe-dirty//g" "build/kernel/kleaf/impl/stamp.bzl"
+      shell: bash
+
     - name: Build kernel
       run: |
         cd s5e8845-kernel
         ./build.sh
       shell: bash
 
+    - name: Clone AnyKernel3
+      run: |
+        git clone https://github.com/exynos1480-dev/AnyKernel3.git
+        cd AnyKernel3
+      shell: bash
+
+    - name: Copy Kernel Files to AnyKernel3
+      run: |
+        cd AnyKernel3
+        cp ../s5e8845-kernel/out/s5e8845_user/dist/Image Image
+      shell: bash
+
+    - name: Package Kernel with AnyKernel3
+      run: |
+        cd AnyKernel3
+        zip -r9 "GlowingKernel-V3-Artifact.zip" * -x .git README.md
+      shell: bash
+
     - name: Upload boot.img artifact
       uses: actions/upload-artifact@v4
       with:
-        name: boot-image
+        name: Boot-Image-ZIP
         path: s5e8845-kernel/out/s5e8845_user/dist/boot.img
+
+    - name: Upload AnyKernel3 Package
+      uses: actions/upload-artifact@v4
+      with:
+        name: AnyKernel3-ZIP
+        path: AnyKernel3/GlowingKernel-V3-Artifact.zip
 
     - name: Upload Image artifact
       uses: actions/upload-artifact@v4
       with:
-        name: kernel-image
+        name: Kernel-Image-ZIP
         path: s5e8845-kernel/out/s5e8845_user/dist/Image
