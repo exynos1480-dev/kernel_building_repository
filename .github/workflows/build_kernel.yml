@@ -19,7 +19,7 @@ jobs:
     - name: Cleanup
       uses: rokibhasansagar/slimhub_actions@main
       with:
-        retain: "docker-ce,docker-ce-cli,containerd.io,docker-buildx-plugin,docker-compose-plugin"
+        retain: "docker_imgcache,docker_buildkit,container_tools"
 
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
