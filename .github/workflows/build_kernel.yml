@@ -104,8 +104,8 @@ jobs:
     - name: Send Telegram Message with Artifact
       uses: appleboy/telegram-action@master
       with:
-        telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
-        chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
         message: |
           *Build Information*:
           - Branch: ${{ github.event.inputs.branch }}
