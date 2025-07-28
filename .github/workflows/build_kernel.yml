@@ -34,27 +34,12 @@ jobs:
         python3 make sudo gcc g++ bc grep tofrodos python3-markdown libxml2-utils xsltproc zlib1g-dev python-is-python3 libc6-dev libtinfo6 \
         make repo cpio kmod openssl libelf-dev pahole libssl-dev libarchive-tools zstd repo
 
-    - name: Setup repo directory and init
+    - name: Build Kernel
       run: |
-        mkdir s5e8845-kernel
-        cd s5e8845-kernel
-        repo init -u https://github.com/kastentop2005/kernel_manifest.git -b ${{ github.event.inputs.branch }}
-        repo sync
-        cd common
+        git clone https://github.com/ducthoe/kernel_building_repository.git -b ${{ github.event.inputs.branch }}
+        cd kernel_building_repository
         git submodule update --init --recursive
-      shell: bash
-
-    - name: Modify build files before building
-      run: |
-        cd s5e8845-kernel
-        sed -i "s/-maybe-dirty//g" "build/kernel/kleaf/impl/stamp.bzl"
-        sed -i 's/--config=stamp//g' "build.sh"
-      shell: bash
-
-    - name: Build kernel
-      run: |
-        cd s5e8845-kernel
-        ./build.sh
+        python3 build_kernel.py --extra-local-version
       shell: bash
 
     - name: Clone AnyKernel3
@@ -66,7 +51,7 @@ jobs:
     - name: Copy Kernel Files to AnyKernel3
       run: |
         cd AnyKernel3
-        cp ../s5e8845-kernel/out/s5e8845_user/dist/Image Image
+        cp ../out/dist/Image Image
       shell: bash
 
     - name: Package Kernel with AnyKernel3
@@ -75,23 +60,11 @@ jobs:
         zip -r9 "GlowingKernel-V3-Artifact.zip" * -x .git README.md
       shell: bash
 
-    - name: Upload boot.img artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Boot-Image-ZIP
-        path: s5e8845-kernel/out/s5e8845_user/dist/boot.img
-
-    - name: Upload AnyKernel3 Package
-      uses: actions/upload-artifact@v4
-      with:
-        name: AnyKernel3-ZIP
-        path: AnyKernel3/GlowingKernel-V3-Artifact.zip
-
     - name: Upload Image artifact
       uses: actions/upload-artifact@v4
       with:
         name: Kernel-Image-ZIP
-        path: s5e8845-kernel/out/s5e8845_user/dist/Image
+        path: /out/dist/Image
 
     - name: Determine Branch Type
       id: branch_type
@@ -113,8 +86,8 @@ jobs:
         message: |
           *Build Information*:
           *Branch*: ${{ github.event.inputs.branch }}
-          *Clang Version*: 17.0.1 (r487747c)
-          *Kernel*: 6.1.141
+          *Clang Version*: 20.0.1
+          *Kernel*: 6.1.146
           *Type*: ${{ env.BRANCH_TYPE }}
           *Device*: Galaxy A55 5G
           *SoC*: s5e8845 (Exynos 1480)
