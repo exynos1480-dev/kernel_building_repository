@@ -19,7 +19,7 @@ jobs:
     - name: Cleanup
       uses: rokibhasansagar/slimhub_actions@main
       with:
-        retain: "docker-ce,docker-ce-cli,containerd.io,docker-buildx-plugin,docker-compose-plugin"
+        retain: "docker_imgcache,docker_buildkit,container_tools"
 
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
@@ -97,9 +97,9 @@ jobs:
       id: branch_type
       run: |
         if [[ "${{ github.event.inputs.branch }}" == *"permissive"* ]]; then
-          echo "BRANCH_TYPE=permissive" >> $GITHUB_ENV
+          echo "BRANCH_TYPE=Permissive" >> $GITHUB_ENV
         else
-          echo "BRANCH_TYPE=enforcing" >> $GITHUB_ENV
+          echo "BRANCH_TYPE=Enforcing" >> $GITHUB_ENV
         fi
       shell: bash
 
@@ -108,12 +108,14 @@ jobs:
       with:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        document: AnyKernel3/GlowingKernel-V3-Artifact.zip
+        format: markdown
         message: |
           *Build Information*:
-          - Branch: ${{ github.event.inputs.branch }}
-          - Clang Version: 17
-          - Branch Type: ${{ env.BRANCH_TYPE }}
-          - Device: Galaxy A55 5G
-          - SoC: s5e8845 (Exynos 1480)
-          - Artifact: GlowingKernel-V3-Artifact.zip
-        document: AnyKernel3/GlowingKernel-V3-Artifact.zip
+          *Branch*: ${{ github.event.inputs.branch }}
+          *Clang Version*: 17.0.1 (r487747c)
+          *Kernel*: 6.1.141
+          *Type*: ${{ env.BRANCH_TYPE }}
+          *Device*: Galaxy A55 5G
+          *SoC*: s5e8845 (Exynos 1480)
+          *NOTE: Don't use Enforcing builds on UI 8*
