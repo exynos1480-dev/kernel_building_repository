@@ -37,7 +37,7 @@ jobs:
     - name: Build Kernel
       run: |
         git clone https://github.com/ducthoe/kernel_build_script.git -b ${{ github.event.inputs.branch }}
-        cd kernel_building_script
+        cd kernel_build_script
         git submodule update --init --recursive
         python3 build_kernel.py --extra-local-version
       shell: bash
