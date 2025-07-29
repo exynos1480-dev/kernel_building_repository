@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to build, check branches in kernel_manifest for list'
+        description: 'Branch to build'
         required: true
         default: 'main'
 
@@ -61,7 +61,7 @@ jobs:
     - name: Package Kernel with AnyKernel3
       run: |
         cd AnyKernel3
-        zip -r9 "GlowingKernel-V3-Artifact.zip" * -x .git README.md
+        zip -r9 "GlowingKernel-V3-${{ github.event.inputs.branch }}" * -x .git README.md
       shell: bash
 
     - name: Upload Image artifact
@@ -69,6 +69,12 @@ jobs:
       with:
         name: Kernel-Image-ZIP
         path: out/dist/Image
+
+    - name: Upload Boot artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Kernel-Image-ZIP
+        path: out/dist/boot.img
 
     - name: Determine Branch Type
       id: branch_type
