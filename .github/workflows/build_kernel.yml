@@ -34,14 +34,18 @@ jobs:
         python3 make sudo gcc g++ bc grep tofrodos python3-markdown libxml2-utils xsltproc zlib1g-dev python-is-python3 libc6-dev libtinfo6 \
         make repo cpio kmod openssl libelf-dev pahole libssl-dev libarchive-tools zstd repo
 
-    - name: Build Kernel
+    - name: Clone Kernel
       run: |
         git clone https://github.com/ducthoe/kernel_build_script.git -b ${{ github.event.inputs.branch }}
         cd kernel_build_script
         git submodule update --init --recursive
-        python3 build_kernel.py --extra-local-version
       shell: bash
-
+      
+    - name: Build kernel
+      run: |
+        python3 build_kernel.py --extra-local-version --create-boot-image --flashable-zip
+      shell: bash
+      
     - name: Clone AnyKernel3
       run: |
         git clone https://github.com/exynos1480-dev/AnyKernel3.git
