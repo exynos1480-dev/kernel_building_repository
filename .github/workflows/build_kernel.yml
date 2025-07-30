@@ -74,7 +74,7 @@ jobs:
     - name: Upload Boot artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Kernel-Image-ZIP
+        name: Kernel-Boot-ZIP
         path: out/dist/boot.img
 
     - name: Determine Branch Type
