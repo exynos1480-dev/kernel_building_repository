@@ -62,7 +62,7 @@ jobs:
     - name: Package Kernel with AnyKernel3
       run: |
         cd AnyKernel3
-        zip -r9 "GlowingKernel-V3-${{ github.event.inputs.branch }}" * -x .git README.md
+        zip -r9 "GlowingKernel-V4-CI-BUILD" * -x .git README.md
       shell: bash
 
     - name: Upload Image artifact
@@ -92,7 +92,7 @@ jobs:
       with:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
-        document: AnyKernel3/GlowingKernel-V3-Artifact.zip
+        document: AnyKernel3/GlowingKernel-V4-CI-BUILD.zip
         format: markdown
         message: |
           *Build Information*:
