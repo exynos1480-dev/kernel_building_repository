@@ -97,7 +97,7 @@ jobs:
         message: |
           *Build Information*:
           *Branch*: ${{ github.event.inputs.branch }}
-          *Clang Version*: 20.0.1
+          *Clang Version*: 20.1.8
           *Kernel*: 6.1.146
           *Type*: ${{ env.BRANCH_TYPE }}
           *Device*: Galaxy A55 5G
