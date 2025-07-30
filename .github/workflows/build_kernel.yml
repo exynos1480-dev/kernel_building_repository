@@ -43,7 +43,8 @@ jobs:
       
     - name: Build kernel
       run: |
-        python3 build_kernel.py --extra-local-version --create-boot-image --flashable-zip
+        cd kernel_build_script
+        python3 build_kernel.py --extra-local-version --create-boot-image
       shell: bash
       
     - name: Clone AnyKernel3
