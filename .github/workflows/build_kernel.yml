@@ -51,6 +51,7 @@ jobs:
     - name: Set Release Metadata
       id: release_info
       run: |
+          cd kernel_build_script
           # Read metadata from prebuilts.json
           KERNEL_DIR=$(jq -r '.Kernel_Source.target_dir_name' prebuilts.json)
           CLANG_DIR=$(jq -r '.Toolchain.target_dir_name' prebuilts.json)
