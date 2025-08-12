@@ -62,7 +62,7 @@ jobs:
     - name: Package Kernel with AnyKernel3
       run: |
         cd AnyKernel3
-        zip -r9 "GlowingKernel-V4-CI-BUILD" * -x .git README.md
+        zip -r9 "GlowingKernel-V4-${{ github.event.inputs.branch }}-CI.zip" * -x .git README.md
       shell: bash
 
     - name: Upload Image artifact
