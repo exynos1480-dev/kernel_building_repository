@@ -124,7 +124,7 @@ jobs:
         message: |
           *Build Information*:
           *Branch*: ${{ github.event.inputs.branch }}
-          *Clang Version*: ${{ steps.release_info.outputs.clang }}
+          *Clang Version*:`${{ steps.release_info.outputs.clang }}`
           *Kernel*: ${{ steps.release_info.outputs.kernel_version }}
           *Type*: ${{ env.BRANCH_TYPE }}
           *Latest commit*: ${{ steps.release_info.outputs.commit }}
