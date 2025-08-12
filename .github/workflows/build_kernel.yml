@@ -46,7 +46,33 @@ jobs:
         cd kernel_build_script
         python3 build_kernel.py --extra-local-version --create-boot-image
       shell: bash
+
       
+    - name: Set Release Metadata
+      id: release_info
+      run: |
+          # Read metadata from prebuilts.json
+          KERNEL_DIR=$(jq -r '.Kernel_Source.target_dir_name' prebuilts.json)
+          CLANG_DIR=$(jq -r '.Toolchain.target_dir_name' prebuilts.json)
+          CLANG_BIN="../prebuilts/$CLANG_DIR/bin/clang"
+
+          MAKEFILE="../$KERNEL_DIR/Makefile"
+          VERSION=$(grep -m1 '^VERSION =' "$MAKEFILE" | awk '{print $3}')
+          PATCHLEVEL=$(grep -m1 '^PATCHLEVEL =' "$MAKEFILE" | awk '{print $3}')
+          SUBLEVEL=$(grep -m1 '^SUBLEVEL =' "$MAKEFILE" | awk '{print $3}')
+          KERNEL_VERSION="$VERSION.$PATCHLEVEL.$SUBLEVEL"
+
+          # Clang version
+          CLANG_VERSION=$($CLANG_BIN --version | head -n1 | sed 's/.*version //')
+
+          # Kernel commit hash
+          KERNEL_COMMIT=$(git -C "../$KERNEL_DIR" rev-parse --short HEAD)
+
+          echo "tag=$KERNEL_VERSION" >> "$GITHUB_OUTPUT"
+          echo "kernel_version=$KERNEL_VERSION" >> "$GITHUB_OUTPUT"
+          echo "clang=$CLANG_VERSION" >> "$GITHUB_OUTPUT"
+          echo "commit=$KERNEL_COMMIT" >> "$GITHUB_OUTPUT"
+ 
     - name: Clone AnyKernel3
       run: |
         git clone https://github.com/exynos1480-dev/AnyKernel3.git
@@ -92,14 +118,15 @@ jobs:
       with:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
-        document: AnyKernel3/GlowingKernel-V4-CI-BUILD.zip
+        document: AnyKernel3/GlowingKernel-V4-${{ github.event.inputs.branch }}-CI.zip
         format: markdown
         message: |
           *Build Information*:
           *Branch*: ${{ github.event.inputs.branch }}
-          *Clang Version*: 20.1.8
-          *Kernel*: 6.1.146
+          *Clang Version*: ${{ steps.release_info.outputs.clang }}
+          *Kernel*: ${{ steps.release_info.outputs.kernel_version }}
           *Type*: ${{ env.BRANCH_TYPE }}
+          *Latest commit*: ${{ steps.release_info.outputs.commit }}
           *Device*: Galaxy A55 5G
           *SoC*: s5e8845 (Exynos 1480)
           *NOTE: Don't use Enforcing builds on UI 8*
